@@ -51,7 +51,18 @@
 <body>
 
   <!-- GIF carregado do Google Drive -->
-  <img class="background" src="gym_bro_intro.gif" alt="Gym Bro Intro" />
+  body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  background-image: url('gym_bro_intro.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
   <!-- Áudio de fundo carregado do Google Drive -->
   <audio id="bgAudio" loop>
@@ -59,12 +70,18 @@
 </audio>
 
 <script>
-  // Reproduz o áudio ao clicar em qualquer botão
-  const audio = document.getElementById("bgAudio");
-  document.addEventListener("click", () => {
+  // Tenta tocar o áudio após 4 segundos
+  setTimeout(() => {
+    const audio = document.getElementById("bgAudio");
     audio.volume = 1;
-    audio.play().catch(console.error);
-  }, { once: true }); // Só ativa uma vez
+    audio.play().catch(err => {
+      console.log("Navegador bloqueou o autoplay. Reproduzirá ao clicar.");
+      // Se o navegador bloquear, toca ao clicar
+      document.addEventListener("click", () => {
+        audio.play().catch(console.error);
+      }, { once: true });
+    });
+  }, 2000); // tempo em milissegundos (2 segundos)
 </script>
 
   <div class="container">
