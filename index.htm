@@ -15,7 +15,7 @@
     }
 
     .background-wrapper {
-      position: fixed;
+      position: relative;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -128,10 +128,8 @@
   <!-- GIF centralizado -->
   <div class="background-wrapper">
     <img src="gym_bro_intro.gif" alt="Gym Bro Intro" class="background-gif" id="mainGif" />
+    <div id="muteBtn" onclick="toggleMute()">🔊</div>
   </div>
-
-  <!-- 🔇 Botão de som -->
-<div id="muteBtn" onclick="toggleMute()">🔊</div>
 
   <!-- Áudio -->
   <audio id="bgAudio" loop>
