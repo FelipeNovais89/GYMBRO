@@ -14,12 +14,13 @@
       overflow: hidden;
     }
     .background {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: -1;
-      object-fit: cover;
-    }
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
     .container {
       position: absolute;
       top: 50%;
@@ -53,10 +54,18 @@
   <img class="background" src="gym_bro_intro.gif" alt="Gym Bro Intro" />
 
   <!-- Áudio de fundo carregado do Google Drive -->
-  <audio autoplay loop>
-    <source src="GYM BRO Intro.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
-  </audio>
+  <audio id="bgAudio" loop>
+  <source src="GYM BRO Intro.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  // Reproduz o áudio ao clicar em qualquer botão
+  const audio = document.getElementById("bgAudio");
+  document.addEventListener("click", () => {
+    audio.volume = 1;
+    audio.play().catch(console.error);
+  }, { once: true }); // Só ativa uma vez
+</script>
 
   <div class="container">
     <h1>GYM BRO</h1>
