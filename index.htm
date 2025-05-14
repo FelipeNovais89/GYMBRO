@@ -31,22 +31,20 @@
     .background-gif {
       max-width: 100%;
       max-height: 100%;
-      object-fit: none;
+      object-fit: contain;
     }
 
     .container {
       position: absolute;
-      top: 75%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       text-align: center;
-      width: 100%;
-      padding: 0 20px;
-      box-sizing: border-box;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
     .btn {
-      margin: 10px;
       padding: 12px 30px;
       background-color: orange;
       border: none;
@@ -66,68 +64,44 @@
       display: none;
     }
 
-    /* ✅ Orientação: retrato (portrait) */
     @media (orientation: portrait) {
-  .background-gif {
-    width: 100vw;
-    height: auto;
-    max-width: none;
-    max-height: none;
-    object-fit: contain;
-  }
+      .btn {
+        width: 70%;
+        font-size: 1.1rem;
+      }
 
-  .container {
-    top: 75%; /* mais para baixo */
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-  }
+      .container {
+        flex-direction: column;
+      }
+    }
 
-  .btn {
-    width: 150px;
-    font-size: 1.1rem;
-  }
-}
-
-    /* ✅ Orientação: paisagem (landscape) */
     @media (orientation: landscape) {
-  .background-gif {
-    width: auto;
-    height: 100vh;
-    max-width: none;
-    max-height: none;
-    object-fit: contain;
-  }
+      .btn {
+        width: 70px;
+        font-size: 1.1rem;
+      }
 
-  .container {
-    top: 75%; /* altura intermediária */
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .btn {
-    width: 150px;
-    font-size: 1.1rem;
-  }
-}
+      .container {
+        flex-direction: row;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- 🎥 GIF centralizado -->
+  <!-- GIF centralizado -->
   <div class="background-wrapper">
-    <img src="gym_bro_intro.gif" alt="Gym Bro Intro" class="background-gif" />
+    <img src="gym_bro_intro.gif" alt="Gym Bro Intro" class="background-gif" id="mainGif" />
   </div>
 
-  <!-- 🔊 Áudio de fundo -->
+  <!-- Áudio -->
   <audio id="bgAudio" loop>
     <source src="GYM BRO Intro.mp3" type="audio/mpeg">
     Seu navegador não suporta áudio.
   </audio>
 
-  <!-- 👇 Botões -->
-  <div class="container">
+  <!-- Botões -->
+  <div class="container" id="container">
     <button class="btn" onclick="playAudio()">Login</button>
     <button class="btn" onclick="playAudio()">Signup</button>
   </div>
@@ -136,10 +110,25 @@
     function playAudio() {
       const audio = document.getElementById("bgAudio");
       audio.volume = 1;
-      audio.play().catch(err => {
-        console.log("Erro ao reproduzir áudio:", err);
-      });
+      audio.play().catch(err => console.log("Erro ao reproduzir áudio:", err));
     }
+
+    function positionButtonsInsideGif() {
+      const gif = document.getElementById("mainGif");
+      const container = document.getElementById("container");
+
+      if (!gif || !container) return;
+
+      const rect = gif.getBoundingClientRect();
+
+      // Alinhar botões a ~70% da altura visível do GIF
+      const targetTop = rect.top + rect.height * 0.75;
+
+      container.style.top = `${targetTop}px`;
+    }
+
+    window.addEventListener("load", positionButtonsInsideGif);
+    window.addEventListener("resize", positionButtonsInsideGif);
   </script>
 
 </body>
