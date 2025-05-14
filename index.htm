@@ -102,6 +102,12 @@
     Seu navegador não suporta áudio.
   </audio>
 
+  <!-- 💥 Efeito sonoro ao clicar -->
+  <audio id="clickSound">
+    <source src="barra_caindo_impacto.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
+
   <!-- Botões -->
   <div class="container" id="container">
     <button class="btn" onclick="playAudio()">Login</button>
@@ -109,12 +115,22 @@
   </div>
 
   <script>
-    function playAudio() {
-      const audio = document.getElementById("bgAudio");
-      audio.volume = 1;
-      audio.play().catch(err => console.log("Erro ao reproduzir áudio:", err));
-    }
+   function playAudio() {
+      const bgAudio = document.getElementById("bgAudio");
+      const clickSound = document.getElementById("clickSound");
 
+      // Toca o som do botão
+      if (clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.play().catch(err => console.log("Erro ao tocar clique:", err));
+      }
+
+      // Inicia música de fundo se ainda não estiver tocando
+      if (bgAudio && bgAudio.paused) {
+        bgAudio.volume = 1;
+        bgAudio.play().catch(err => console.log("Erro ao tocar música de fundo:", err));
+      }
+    }
     function positionButtonsInsideGif() {
       const gif = document.getElementById("mainGif");
       const container = document.getElementById("container");
