@@ -40,6 +40,9 @@
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
+      width: 100%;
+      padding: 0 20px;
+      box-sizing: border-box;
     }
 
     .btn {
@@ -62,30 +65,51 @@
     audio {
       display: none;
     }
+
+    /* Responsividade para celular */
+    @media (max-width: 600px) {
+      .background-gif {
+        width: 100vw;
+        height: auto;
+        max-width: none;
+        max-height: none;
+        object-fit: contain;
+      }
+
+      .container {
+        top: 70%;
+      }
+
+      .btn {
+        width: 80%;
+        font-size: 1.1rem;
+        margin: 8px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- GIF centralizado sem redimensionamento -->
+  <!-- GIF centralizado -->
   <div class="background-wrapper">
     <img src="gym_bro_intro.gif" alt="Gym Bro Intro" class="background-gif" />
   </div>
 
-  <!-- Áudio (inicia ao clicar em qualquer botão) -->
+  <!-- Áudio -->
   <audio id="bgAudio" loop>
     <source src="GYM BRO Intro.mp3" type="audio/mpeg">
     Seu navegador não suporta áudio.
   </audio>
 
   <div class="container">
-      <button class="btn" onclick="playAudio()">Login</button>
-    <button class="btn" onclick="playAudio()">Singup</button>
+    <button class="btn" onclick="playAudio()">Login</button>
+    <button class="btn" onclick="playAudio()">Cadastrar</button>
   </div>
 
   <script>
     function playAudio() {
       const audio = document.getElementById("bgAudio");
-      audio.volume = 1;
+      audio.volume = 0,5;
       audio.play().catch(err => {
         console.log("Erro ao reproduzir áudio:", err);
       });
