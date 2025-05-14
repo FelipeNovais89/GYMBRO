@@ -15,13 +15,18 @@
     }
 
     .background-wrapper {
-  position: relative; /* <-- ESSENCIAL para posicionar elementos internos */
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
 
     .background-gif {
       max-width: 100%;
@@ -123,8 +128,10 @@
   <!-- GIF centralizado -->
   <div class="background-wrapper">
     <img src="gym_bro_intro.gif" alt="Gym Bro Intro" class="background-gif" id="mainGif" />
-    <div id="muteBtn" onclick="toggleMute()">🔊</div>
-  </div>
+     </div>
+
+  <!-- 🔇 Botão de som -->
+<div id="muteBtn" onclick="toggleMute()">🔊</div>
 
   <!-- Áudio -->
   <audio id="bgAudio" loop>
