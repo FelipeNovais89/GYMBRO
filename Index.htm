@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GYM BRO - Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+    .background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -1;
+      object-fit: cover;
+    }
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .btn {
+      margin: 10px;
+      padding: 12px 30px;
+      background-color: orange;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #ffaa00;
+    }
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- GIF carregado do Google Drive -->
+  <img class="background" src="https://drive.google.com/uc?export=view&amp;id=19Exrg68wEdfhD8augB4vFxFIYNqCld-B" alt="Gym Bro Intro" />
+
+  <!-- Áudio de fundo carregado do Google Drive -->
+  <audio autoplay loop>
+    <source src="https://drive.google.com/uc?export=download&amp;id=1lEpGZ_HAJAWpgf5L_cdLdls8x8At48hL" type="audio/mp3">
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <div class="container">
+    <h1>GYM BRO</h1>
+    <button class="btn">Login</button>
+    <button class="btn">Cadastrar</button>
+  </div>
+
+</body>
+</html>
