@@ -87,6 +87,15 @@
         flex-direction: row;
       }
     }
+    #muteBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 28px;
+  z-index: 10;
+  cursor: pointer;
+  user-select: none;
+}
   </style>
 </head>
 <body>
@@ -95,6 +104,9 @@
   <div class="background-wrapper">
     <img src="gym_bro_intro.gif" alt="Gym Bro Intro" class="background-gif" id="mainGif" />
   </div>
+
+  <!-- 🔇 Botão de som -->
+<div id="muteBtn" onclick="toggleMute()">🔊</div>
 
   <!-- Áudio -->
   <audio id="bgAudio" loop>
@@ -115,22 +127,35 @@
   </div>
 
   <script>
-   function playAudio() {
-      const bgAudio = document.getElementById("bgAudio");
-      const clickSound = document.getElementById("clickSound");
+   let isMuted = false;
 
-      // Toca o som do botão
-      if (clickSound) {
-        clickSound.currentTime = 0;
-        clickSound.play().catch(err => console.log("Erro ao tocar clique:", err));
-      }
+  function playAudio() {
+    const bgAudio = document.getElementById("bgAudio");
+    const clickSound = document.getElementById("clickSound");
 
-      // Inicia música de fundo se ainda não estiver tocando
-      if (bgAudio && bgAudio.paused) {
-        bgAudio.volume = 1;
-        bgAudio.play().catch(err => console.log("Erro ao tocar música de fundo:", err));
-      }
+    // Toca o som do botão
+    if (clickSound) {
+      clickSound.currentTime = 0;
+      clickSound.play().catch(err => console.log("Erro ao tocar clique:", err));
     }
+
+    // Inicia música de fundo se ainda não estiver tocando
+    if (bgAudio && bgAudio.paused && !isMuted) {
+      bgAudio.volume = 1;
+      bgAudio.play().catch(err => console.log("Erro ao tocar música de fundo:", err));
+    }
+  }
+
+  function toggleMute() {
+    const bgAudio = document.getElementById("bgAudio");
+    const muteBtn = document.getElementById("muteBtn");
+
+    isMuted = !isMuted;
+    bgAudio.muted = isMuted;
+
+    // Atualiza o ícone
+    muteBtn.textContent = isMuted ? "🔇" : "🔊";
+  }
     function positionButtonsInsideGif() {
       const gif = document.getElementById("mainGif");
       const container = document.getElementById("container");
