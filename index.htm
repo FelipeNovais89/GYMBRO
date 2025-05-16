@@ -13,21 +13,33 @@
       color: white;
       overflow: hidden;
     }
+
     #background {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      object-fit: contain;
+      width: auto;
       height: 100vh;
-      object-fit: cover;
       z-index: -2;
       filter: brightness(0.6);
     }
+
+    @media (orientation: portrait) {
+      #background {
+        width: 100vw;
+        height: auto;
+      }
+    }
+
     .container {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
     }
+
     .button-image {
       width: 160px;
       margin: 10px;
@@ -44,15 +56,27 @@
       pointer-events: none;
       text-shadow: 1px 1px 4px black;
     }
+
     #transition-video {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: auto;
       height: 100vh;
-      object-fit: cover;
+      object-fit: contain;
       display: none;
       z-index: 1000;
+      background: black;
     }
+
+    @media (orientation: portrait) {
+      #transition-video {
+        width: 100vw;
+        height: auto;
+      }
+    }
+
     .form-section {
       display: none;
     }
@@ -97,10 +121,10 @@
 </head>
 <body>
 
-  <!-- Imagem de fundo -->
-  <img id="background" src="gym_background.png" alt="Academia Fundo" />
+  <!-- Imagem/GIF de fundo -->
+  <img id="background" src="gym_bro_intro.gif" alt="Academia Fundo" />
 
-  <!-- Música de fundo -->
+  <!-- Áudio de fundo -->
   <audio id="bgMusic" src="gymbro_intro_music.mp3" loop></audio>
 
   <!-- Vídeo de transição -->
@@ -129,7 +153,7 @@
     <button class="back-btn" onclick="goHome()">Voltar</button>
   </section>
 
-  <!-- Tela Cadastrar -->
+  <!-- Tela Cadastro -->
   <section id="signup" class="container form-section">
     <form id="signupForm">
       <h2>Cadastrar</h2>
@@ -141,50 +165,52 @@
     <button class="back-btn" onclick="goHome()">Voltar</button>
   </section>
 
-<script>
-  const transitionVideo = document.getElementById("transition-video");
-  const bgMusic = document.getElementById("bgMusic");
-  const home = document.getElementById("home");
-  const loginSection = document.getElementById("login");
-  const signupSection = document.getElementById("signup");
+  <script>
+    const transitionVideo = document.getElementById("transition-video");
+    const bgMusic = document.getElementById("bgMusic");
+    const home = document.getElementById("home");
+    const loginSection = document.getElementById("login");
+    const signupSection = document.getElementById("signup");
+    const background = document.getElementById("background");
 
-  function playTransition(target) {
-    home.style.display = "none";
-    transitionVideo.style.display = "block";
-    transitionVideo.currentTime = 0;
-    transitionVideo.play();
+    function playTransition(target) {
+      home.style.display = "none";
+      transitionVideo.style.display = "block";
+      background.style.display = "none"; // esconde o GIF durante o vídeo
+      transitionVideo.currentTime = 0;
+      transitionVideo.play();
 
-    transitionVideo.onended = () => {
-      transitionVideo.style.display = "none";
-      bgMusic.play();  // Música começa somente aqui
+      transitionVideo.onended = () => {
+        transitionVideo.style.display = "none";
+        background.style.display = "block"; // mostra o GIF de novo
+        bgMusic.play();
 
-      if (target === "login") {
-        loginSection.classList.add("active");
-      } else {
-        signupSection.classList.add("active");
-      }
+        if (target === "login") {
+          loginSection.classList.add("active");
+        } else {
+          signupSection.classList.add("active");
+        }
+      };
+    }
+
+    function goHome() {
+      loginSection.classList.remove("active");
+      signupSection.classList.remove("active");
+      home.style.display = "block";
+    }
+
+    document.getElementById("loginBtn").onclick = () => playTransition("login");
+    document.getElementById("signupBtn").onclick = () => playTransition("signup");
+
+    document.getElementById("loginForm").onsubmit = (e) => {
+      e.preventDefault();
+      alert("Login enviado!");
     };
-  }
-
-  function goHome() {
-    loginSection.classList.remove("active");
-    signupSection.classList.remove("active");
-    home.style.display = "block";
-  }
-
-  document.getElementById("loginBtn").onclick = () => playTransition("login");
-  document.getElementById("signupBtn").onclick = () => playTransition("signup");
-
-  // Placeholder submits
-  document.getElementById("loginForm").onsubmit = (e) => {
-    e.preventDefault();
-    alert("Login enviado!");
-  };
-  document.getElementById("signupForm").onsubmit = (e) => {
-    e.preventDefault();
-    alert("Cadastro enviado!");
-  };
-</script>
+    document.getElementById("signupForm").onsubmit = (e) => {
+      e.preventDefault();
+      alert("Cadastro enviado!");
+    };
+  </script>
 
 </body>
 </html>
