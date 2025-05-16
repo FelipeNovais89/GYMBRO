@@ -1,215 +1,196 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GYMBRO - Início</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GYM BRO - Login</title>
   <style>
-    * { box-sizing: border-box; }
-    body, html {
-      margin: 0; padding: 0;
-      height: 100%; background: black;
-      font-family: 'Segoe UI', sans-serif;
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
       color: white;
+      font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
     }
 
-    #background {
+    .background-wrapper {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      object-fit: contain;
-      width: auto;
-      height: 100vh;
-      z-index: -2;
-      filter: brightness(0.6);
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
     }
 
-    @media (orientation: portrait) {
-      #background {
-        width: 100vw;
-        height: auto;
-      }
+    .background-gif {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    #muteBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 28px;
+      z-index: 10;
+      cursor: pointer;
+      user-select: none;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;
+      border-radius: 8px;
     }
 
     .container {
       position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
-
-    .button-image {
-      width: 160px;
-      margin: 10px;
-      cursor: pointer;
-      position: relative;
-    }
-    .button-label {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-weight: bold;
-      font-size: 1.2rem;
-      pointer-events: none;
-      text-shadow: 1px 1px 4px black;
-    }
-
-    #transition-video {
-      position: fixed;
-      top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      width: auto;
-      height: 100vh;
-      object-fit: contain;
+      transform: translateX(-50%);
+      text-align: center;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      background-color: orange;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #ffaa00;
+    }
+
+    audio {
       display: none;
-      z-index: 1000;
-      background: black;
     }
 
     @media (orientation: portrait) {
-      #transition-video {
+      .background-gif {
         width: 100vw;
         height: auto;
+        max-width: none;
+        max-height: none;
+        object-fit: contain;
+      }
+
+      .btn {
+        width: 70%;
+        font-size: 1.1rem;
+      }
+
+      .container {
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
       }
     }
 
-    .form-section {
-      display: none;
-    }
-    .form-section.active {
-      display: block;
-    }
-    form {
-      background: rgba(0,0,0,0.7);
-      padding: 25px;
-      border-radius: 10px;
-      max-width: 300px;
-      margin: 20px auto;
-      box-shadow: 0 0 10px orange;
-    }
-    input[type="text"], input[type="email"], input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-    input[type="submit"] {
-      width: 100%;
-      padding: 10px;
-      background: orange;
-      color: black;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .back-btn {
-      margin-top: 10px;
-      background: none;
-      border: none;
-      color: white;
-      text-decoration: underline;
-      cursor: pointer;
+    @media (orientation: landscape) {
+      .background-gif {
+        width: auto;
+        height: 100vh;
+        max-width: none;
+        max-height: none;
+        object-fit: contain;
+      }
+
+      .btn {
+        width: 160px;
+        font-size: 1.1rem;
+      }
+
+      .container {
+        flex-direction: row;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Imagem/GIF de fundo -->
-  <img id="background" src="gym_bro_intro.gif" alt="Academia Fundo" />
+  <!-- GIF centralizado -->
+  <div class="background-wrapper">
+    <img src="gym_bro_intro.gif" alt="Gym Bro Intro" class="background-gif" id="mainGif" />
+  </div>
 
-  <!-- Áudio de fundo -->
-  <audio id="bgMusic" src="gymbro_intro_music.mp3" loop></audio>
+  <!-- 🔇 Botão de som -->
+  <div id="muteBtn" onclick="toggleMute()">🔊</div>
 
-  <!-- Vídeo de transição -->
-  <video id="transition-video" src="GYMBRO - Video Transition 1.mp4" playsinline></video>
+  <!-- 🎵 Áudio -->
+  <audio id="bgAudio" loop>
+    <source src="GYM BRO Intro.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
 
-  <!-- Tela Inicial -->
-  <section id="home" class="container">
-    <div style="position: relative; display: inline-block;">
-      <img src="Anilha Botão.png" class="button-image" id="loginBtn" />
-      <div class="button-label">Login</div>
-    </div>
-    <div style="position: relative; display: inline-block;">
-      <img src="Anilha Botão.png" class="button-image" id="signupBtn" />
-      <div class="button-label">Cadastrar</div>
-    </div>
-  </section>
+  <!-- 💥 Efeito sonoro ao clicar -->
+  <audio id="clickSound">
+    <source src="barra_caindo_impacto.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
 
-  <!-- Tela Login -->
-  <section id="login" class="container form-section">
-    <form id="loginForm">
-      <h2>Login</h2>
-      <input type="email" placeholder="Email" required />
-      <input type="password" placeholder="Senha" required />
-      <input type="submit" value="Entrar" />
-    </form>
-    <button class="back-btn" onclick="goHome()">Voltar</button>
-  </section>
-
-  <!-- Tela Cadastro -->
-  <section id="signup" class="container form-section">
-    <form id="signupForm">
-      <h2>Cadastrar</h2>
-      <input type="text" placeholder="Nome" required />
-      <input type="email" placeholder="Email" required />
-      <input type="password" placeholder="Senha" required />
-      <input type="submit" value="Cadastrar" />
-    </form>
-    <button class="back-btn" onclick="goHome()">Voltar</button>
-  </section>
+  <!-- Botões -->
+  <div class="container" id="container">
+    <button class="btn" onclick="playAudio('login')">Login</button>
+    <button class="btn" onclick="playAudio('signup')">Signup</button>
+  </div>
 
   <script>
-    const transitionVideo = document.getElementById("transition-video");
-    const bgMusic = document.getElementById("bgMusic");
-    const home = document.getElementById("home");
-    const loginSection = document.getElementById("login");
-    const signupSection = document.getElementById("signup");
-    const background = document.getElementById("background");
+    let isMuted = false;
+    let audioStarted = false;
 
-    function playTransition(target) {
-      home.style.display = "none";
-      transitionVideo.style.display = "block";
-      background.style.display = "none"; // esconde o GIF durante o vídeo
-      transitionVideo.currentTime = 0;
-      transitionVideo.play();
+    function playAudio(action) {
+      const clickSound = document.getElementById("clickSound");
+      const bgAudio = document.getElementById("bgAudio");
 
-      transitionVideo.onended = () => {
-        transitionVideo.style.display = "none";
-        background.style.display = "block"; // mostra o GIF de novo
-        bgMusic.play();
+      if (clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.play().catch(err => console.log("Erro ao tocar clique:", err));
+      }
 
-        if (target === "login") {
-          loginSection.classList.add("active");
-        } else {
-          signupSection.classList.add("active");
-        }
-      };
+      if (!audioStarted && !isMuted) {
+        bgAudio.volume = 1;
+        bgAudio.play().catch(err => console.log("Erro ao tocar música de fundo:", err));
+        audioStarted = true;
+      }
+
+      // Simula redirecionamento após clique (ajuste conforme necessidade)
+      console.log(`Botão '${action}' pressionado.`);
     }
 
-    function goHome() {
-      loginSection.classList.remove("active");
-      signupSection.classList.remove("active");
-      home.style.display = "block";
+    function toggleMute() {
+      const bgAudio = document.getElementById("bgAudio");
+      const muteBtn = document.getElementById("muteBtn");
+
+      isMuted = !isMuted;
+      bgAudio.muted = isMuted;
+      muteBtn.textContent = isMuted ? "🔇" : "🔊";
     }
 
-    document.getElementById("loginBtn").onclick = () => playTransition("login");
-    document.getElementById("signupBtn").onclick = () => playTransition("signup");
+    function positionButtonsInsideGif() {
+      const gif = document.getElementById("mainGif");
+      const container = document.getElementById("container");
 
-    document.getElementById("loginForm").onsubmit = (e) => {
-      e.preventDefault();
-      alert("Login enviado!");
-    };
-    document.getElementById("signupForm").onsubmit = (e) => {
-      e.preventDefault();
-      alert("Cadastro enviado!");
-    };
+      if (!gif || !container) return;
+
+      const rect = gif.getBoundingClientRect();
+      const targetTop = rect.top + rect.height * 0.75;
+      container.style.top = `${targetTop}px`;
+    }
+
+    window.addEventListener("load", positionButtonsInsideGif);
+    window.addEventListener("resize", positionButtonsInsideGif);
   </script>
 
 </body>
