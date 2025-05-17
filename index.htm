@@ -279,7 +279,7 @@ form {
       <h2>Login</h2>
       <input type="email" placeholder="Email" required />
       <input type="password" placeholder="Password" required />
-      <input type="submit" value="Submit" />
+      <input type="submit" value="Entrar" />
     </form>
     <button class="back-btn" onclick="goHome()">Voltar</button>
   </section>
@@ -294,7 +294,7 @@ form {
       <input type="text" placeholder="Name" required />
       <input type="email" placeholder="Email" required />
       <input type="password" placeholder="Password" required />
-      <input type="submit" value="Submit" />
+      <input type="submit" value="Cadastrar" />
     </form>
     <button class="back-btn" onclick="goHome()">Voltar</button>
   </section>
@@ -302,10 +302,24 @@ form {
 <script>
   let isMuted = false;
 
-  // Utilitários DOM
+  // Utilitário para acessar elementos por ID
   const get = id => document.getElementById(id);
 
-  // Posiciona os botões com base no GIF
+  // Lista de músicas para tocar aleatoriamente
+  const playlist = [
+    "audio/GYM BRO Intro.mp3",
+    "audio/Fitness Pulse (1).mp3",
+    "audio/Fitness Boost.mp3",
+    "audio/Fitness Boost (1).mp3"
+  ];
+
+  // Retorna uma faixa aleatória da playlist
+  function getRandomTrack() {
+    const index = Math.floor(Math.random() * playlist.length);
+    return playlist[index];
+  }
+
+  // Posiciona os botões com base no tamanho do GIF
   function positionButtonsInsideGif() {
     const gif = get("mainGif");
     const container = get("container");
@@ -314,10 +328,10 @@ form {
 
     const rect = gif.getBoundingClientRect();
     const targetTop = rect.top + rect.height * 0.75;
-    container.style.top = ${targetTop}px;
+    container.style.top = `${targetTop}px`;
   }
 
-  // Toca som de clique + transição para login/signup
+  // Ação ao clicar em Login ou Signup
   function playAudio(target) {
     const gif = get("mainGif");
     const container = get("container");
@@ -325,48 +339,49 @@ form {
     const bgAudio = get("bgAudio");
     const clickSound = get("clickSound");
 
-    // Seções
     const loginSection = get("login");
     const signupSection = get("signup");
 
-    // Toca som de clique
     if (clickSound) {
       clickSound.currentTime = 0;
       clickSound.play();
     }
 
-    // Esconde tela inicial
     gif.style.display = "none";
     container.style.display = "none";
     loginSection.classList.remove("active");
     signupSection.classList.remove("active");
 
-    // Exibe vídeo de entrada
     transitionIn.style.display = "block";
     transitionIn.currentTime = 0;
     transitionIn.play();
 
-    // Ao terminar vídeo de entrada, mostra tela de login/signup
-    transitionIn.onended = () => {
-      transitionIn.style.display = "none";
-      if (!isMuted) bgAudio.play();
+   transitionIn.onended = () => {
+  transitionIn.style.display = "none";
 
-      if (target === "login") {
-        loginSection.classList.add("active");
-      } else {
-        signupSection.classList.add("active");
-      }
-    };
+  if (!isMuted) {
+    const track = getRandomTrack();
+    console.log("Tocando:", track); // LOG para depuração
+    bgAudio.src = track;
+    bgAudio.load();
+    bgAudio.play().catch(err => console.error("Erro ao tocar áudio:", err));
   }
 
-  // Transição de volta à tela inicial
+  if (target === "login") {
+    loginSection.classList.add("active");
+  } else {
+    signupSection.classList.add("active");
+  }
+};
+  }
+
+  // Ação ao clicar em "Voltar"
   function goHome() {
     const gif = get("mainGif");
     const container = get("container");
-    const transitionOut = get("transition-out");
-
     const loginSection = get("login");
     const signupSection = get("signup");
+    const transitionOut = get("transition-out");
 
     loginSection.classList.remove("active");
     signupSection.classList.remove("active");
@@ -382,7 +397,7 @@ form {
     };
   }
 
-  // Alterna som ligado/desligado
+  // Alternar mute
   function toggleMute() {
     const bgAudio = get("bgAudio");
     const muteBtn = get("muteBtn");
@@ -392,7 +407,7 @@ form {
     muteBtn.textContent = isMuted ? "🔇" : "🔊";
   }
 
-  // Inicialização
+  // Inicializar posição dos botões
   window.addEventListener("load", positionButtonsInsideGif);
   window.addEventListener("resize", positionButtonsInsideGif);
 </script>
