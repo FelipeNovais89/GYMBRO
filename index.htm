@@ -259,11 +259,14 @@ form {
   <!-- 🔇 Botão de som -->
 <div id="muteBtn" onclick="toggleMute()">🔊</div>
 
-  <!-- Áudio -->
-  <audio id="bgAudio" loop></audio>
-    
-    Seu navegador não suporta áudio.
-  </audio>
+  <!-- Música de fundo -->
+<audio id="bgAudio" loop></audio>
+
+<!-- Som do clique -->
+<audio id="clickSound">
+  <source src="barra_caindo_impacto.mp3" type="audio/mpeg">
+  Seu navegador não suporta áudio.
+</audio>
 
   <!-- 💥 Efeito sonoro ao clicar -->
   <audio id="clickSound">
@@ -303,10 +306,24 @@ form {
 <script>
   let isMuted = false;
 
-  // Utilitários DOM
+  // Utilitário para acessar elementos por ID
   const get = id => document.getElementById(id);
 
-  // Posiciona os botões com base no GIF
+  // Lista de músicas para tocar aleatoriamente
+  const playlist = [
+    "audio/GYM BRO Intro.mp3",
+    "audio/Fitness Pulse (1).mp3",
+    "audio/Fitness Boost.mp3",
+    "audio/Fitness Boost (1).mp3"
+  ];
+
+  // Retorna uma faixa aleatória da playlist
+  function getRandomTrack() {
+    const index = Math.floor(Math.random() * playlist.length);
+    return playlist[index];
+  }
+
+  // Posiciona os botões com base no tamanho do GIF
   function positionButtonsInsideGif() {
     const gif = get("mainGif");
     const container = get("container");
@@ -317,70 +334,41 @@ form {
     const targetTop = rect.top + rect.height * 0.75;
     container.style.top = `${targetTop}px`;
   }
-const playlist = [
-  "audio/GYM BRO Intro.mp3",
-  "audio/Fitness Pulse (1).mp3",
-  "audio/Fitness Boost.mp3",
-  "audio/Fitness Boost (1).mp3"
-];
-  // Toca som de clique + transição para login/signup
-function playAudio(target) {
-  const gif = get("mainGif");
-  const container = get("container");
-  const transitionIn = get("transition-in");
-  const bgAudio = get("bgAudio");
-  const clickSound = get("clickSound");
 
-  const loginSection = get("login");
-  const signupSection = get("signup");
+  // Ação ao clicar em Login ou Signup
+  function playAudio(target) {
+    const gif = get("mainGif");
+    const container = get("container");
+    const transitionIn = get("transition-in");
+    const bgAudio = get("bgAudio");
+    const clickSound = get("clickSound");
 
-  if (clickSound) {
-    clickSound.currentTime = 0;
-    clickSound.play();
-  }
+    const loginSection = get("login");
+    const signupSection = get("signup");
 
-  gif.style.display = "none";
-  container.style.display = "none";
-  loginSection.classList.remove("active");
-  signupSection.classList.remove("active");
-
-  transitionIn.style.display = "block";
-  transitionIn.currentTime = 0;
-  transitionIn.play();
-
-  transitionIn.onended = () => {
-    transitionIn.style.display = "none";
-
-    if (!isMuted) {
-      const track = getRandomTrack();
-      bgAudio.src = track;
-      bgAudio.load();
-      bgAudio.play();
+    if (clickSound) {
+      clickSound.currentTime = 0;
+      clickSound.play();
     }
 
-    if (target === "login") {
-      loginSection.classList.add("active");
-    } else {
-      signupSection.classList.add("active");
-    }
-  };
-}
-
-    // Esconde tela inicial
     gif.style.display = "none";
     container.style.display = "none";
     loginSection.classList.remove("active");
     signupSection.classList.remove("active");
 
-    // Exibe vídeo de entrada
     transitionIn.style.display = "block";
     transitionIn.currentTime = 0;
     transitionIn.play();
 
-    // Ao terminar vídeo de entrada, mostra tela de login/signup
     transitionIn.onended = () => {
       transitionIn.style.display = "none";
-      if (!isMuted) bgAudio.play();
+
+      if (!isMuted) {
+        const track = getRandomTrack();
+        bgAudio.src = track;
+        bgAudio.load();
+        bgAudio.play();
+      }
 
       if (target === "login") {
         loginSection.classList.add("active");
@@ -390,14 +378,13 @@ function playAudio(target) {
     };
   }
 
-  // Transição de volta à tela inicial
+  // Ação ao clicar em "Voltar"
   function goHome() {
     const gif = get("mainGif");
     const container = get("container");
-    const transitionOut = get("transition-out");
-
     const loginSection = get("login");
     const signupSection = get("signup");
+    const transitionOut = get("transition-out");
 
     loginSection.classList.remove("active");
     signupSection.classList.remove("active");
@@ -413,7 +400,7 @@ function playAudio(target) {
     };
   }
 
-  // Alterna som ligado/desligado
+  // Alternar mute
   function toggleMute() {
     const bgAudio = get("bgAudio");
     const muteBtn = get("muteBtn");
@@ -423,7 +410,7 @@ function playAudio(target) {
     muteBtn.textContent = isMuted ? "🔇" : "🔊";
   }
 
-  // Inicialização
+  // Inicializar posição dos botões
   window.addEventListener("load", positionButtonsInsideGif);
   window.addEventListener("resize", positionButtonsInsideGif);
 </script>
