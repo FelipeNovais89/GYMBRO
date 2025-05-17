@@ -38,7 +38,16 @@
       max-height: 100%;
       object-fit: contain;
     }
-    #transition-in, transition-out {
+    #transition-in {
+      display: none;
+      position:
+      fixed;
+      top: 50%;
+      left:50%;
+      transform: translate(-50%, -50%);
+      z- index: 2 /* acima do gif e botões */
+    }
+    #transition-out {
       display: none;
       position:
       fixed;
