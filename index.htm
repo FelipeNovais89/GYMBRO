@@ -260,7 +260,9 @@ form {
 <div id="muteBtn" onclick="toggleMute()">🔊</div>
 
   <!-- Música de fundo -->
-<audio id="bgAudio" loop></audio>
+<audio id="bgAudio" loop>
+  <source src="audio/GYM BRO Intro.mp3" type="audio/mpeg">
+</audio>
 
   <!-- 💥 Efeito sonoro ao clicar -->
   <audio id="clickSound">
@@ -269,7 +271,7 @@ form {
   </audio>
 
   <!-- Tela Login -->
-  <section id="login" class="form-screenn form-section">
+  <section id="login" class="form-screen form-section">
     <div class="background-wrapper">
     <img src="gym_background.png" class="background-gif" />
   </div>
@@ -326,7 +328,7 @@ form {
 
     const rect = gif.getBoundingClientRect();
     const targetTop = rect.top + rect.height * 0.75;
-    container.style.top = ${targetTop}px;
+    container.style.top = `${targetTop}px`;
   }
 
   // Ação ao clicar em Login ou Signup
