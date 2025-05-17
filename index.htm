@@ -310,7 +310,7 @@ form {
     "audio/Fitness Boost.mp3",
     "audio/Fitness Boost (1).mp3"
   ];
-  
+
   // Retorna uma faixa aleatória da playlist
   function getRandomTrack() {
     const index = Math.floor(Math.random() * playlist.length);
@@ -326,7 +326,7 @@ form {
 
     const rect = gif.getBoundingClientRect();
     const targetTop = rect.top + rect.height * 0.75;
-    container.style.top = `${targetTop}px`;
+    container.style.top = ${targetTop}px;
   }
 
   // Ação ao clicar em Login ou Signup
@@ -354,25 +354,22 @@ form {
     transitionIn.currentTime = 0;
     transitionIn.play();
 
-transitionIn.onended = () => {
-  transitionIn.style.display = "none";
+    transitionIn.onended = () => {
+      transitionIn.style.display = "none";
 
-  if (!isMuted) {
-    window.addEventListener("click", () => {
-  if (!bgAudio.src) {
-    const track = getRandomTrack();
-    console.log("Tocando:", track); // LOG para depuração
-    bgAudio.src = track;
-    bgAudio.load();
-    bgAudio.play().catch(err => console.error("Erro ao tocar áudio:", err));
-  }
-    }}
-  if (target === "login") {
-    loginSection.classList.add("active");
-  } else {
-    signupSection.classList.add("active");
-  }
-};
+      if (!isMuted) {
+        const track = getRandomTrack();
+        bgAudio.src = track;
+        bgAudio.load();
+        bgAudio.play();
+      }
+
+      if (target === "login") {
+        loginSection.classList.add("active");
+      } else {
+        signupSection.classList.add("active");
+      }
+    };
   }
 
   // Ação ao clicar em "Voltar"
