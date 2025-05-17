@@ -33,7 +33,28 @@
       max-height: 100%;
       object-fit: contain;
     }
-    
+     .video-transition {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .button-image {
+      width: 160px;
+      margin: 10px;
+      cursor: pointer;
+      position: relative;
+      }
+    .button-label {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      font-size: 1.2rem;
+      pointer-events: none;
+      text-shadow: 2px 2px 4px black;
+    }
     #muteBtn {
   position: absolute;
   top: 10px;
@@ -46,7 +67,12 @@
   padding: 5px 10px;
   border-radius: 8px;
 }
-
+.form-section {
+      display: none;
+    }
+    .form-section.active {
+      display: block;
+    }
     .container {
       position: absolute;
       left: 50%;
@@ -57,18 +83,40 @@
       flex-wrap: nowrap;
     }
 
-    .btn {
-      padding: 12px 30px;
-      background-color: orange;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #000;
-      cursor: pointer;
-      transition: background 0.3s;
+form {
+      background: rgba(0,0,0,0.7);
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 300px;
+      margin: 20px auto;
+      box-shadow: 0 0 10px orange;
     }
-
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background: orange;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .back-btn {
+      margin-top: 10px;
+      background: none;
+      border: none;
+      color: white;
+      text-decoration: underline;
+      cursor: pointer;
+    }
     .btn:hover {
       background-color: #ffaa00;
     }
@@ -86,8 +134,18 @@
         object-fit: contain;
       }
 
-      .btn {
+      .video-transition {
+        width: 100vw;
+        height: auto;
+        max-width: none;
+        max-height: none;
+        object-fit: contain;
+      }
+      
+      .button-image {
         width: 70%;
+      }
+      .button-label {
         font-size: 1.1rem;
       }
 
@@ -109,11 +167,19 @@
         max-height: none;
         object-fit: contain;
       }
-      .btn {
+      .video-transition {
+        width: auto;
+        height: 100vh;
+        max-width: none;
+        max-height: none;
+        object-fit: contain;
+      }
+      .button-image {
         width: 160px;
+      }
+      .button-label {
         font-size: 1.1rem;
       }
-
       .container {
         flex-direction: row;
       }
@@ -129,7 +195,13 @@
   <div class="background-wrapper">
     <img src="gym_bro_intro.gif" alt="Gym Bro Intro" class="background-gif" id="mainGif" />
      </div>
+  
+<!-- Vídeo de transição de entrada -->
+<video id="transition-in" src="videos/GYMBRO - Video Transition 1.mp4" class="video-transition" playsinline></video>
 
+<!-- Vídeo de transição de saída -->
+<video id="transition-out" src="videos/GYMBRO - Video Transition 2.mp4" class="video-transition" playsinline></video>
+  
   <!-- 🔇 Botão de som -->
 <div id="muteBtn" onclick="toggleMute()">🔊</div>
 
@@ -145,30 +217,110 @@
     Seu navegador não suporta áudio.
   </audio>
 
-  <!-- Botões -->
-  <div class="container" id="container">
-    <button class="btn" onclick="playAudio()">Login</button>
-    <button class="btn" onclick="playAudio()">Signup</button>
+  <!-- Botões com imagem e texto -->
+<div class="container" id="container">
+  <div style="position: relative; display: inline-block;" onclick="playAudio('login')">
+    <img src="Anilha Botao.png" class="button-image" />
+    <div class="button-label">Login</div>
   </div>
 
-  <script>
-   let isMuted = false;
+  <div style="position: relative; display: inline-block;" onclick="playAudio('signup')">
+    <img src="Anilha Botao.png" class="button-image" />
+    <div class="button-label">Signup</div>
+  </div>
+</div>
+  
+  <!-- Tela Login -->
+  <section id="login" class="container form-section">
+    <div class="background-wrapper">
+    <img src="gym_background.png" class="background-gif" />
+  </div>
+    <form id="loginForm">
+      <h2>Login</h2>
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Senha" required />
+      <input type="submit" value="Entrar" />
+    </form>
+    <button class="back-btn" onclick="goHome()">Voltar</button>
+  </section>
 
-  function playAudio() {
+  <!-- Tela Signup -->
+  <section id="signup" class="container form-section">
+    <img src="gym_background.png" class="background-gif" />
+  </div>
+    <form id="signupForm">
+      <h2>Cadastrar</h2>
+      <input type="text" placeholder="Nome" required />
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Senha" required />
+      <input type="submit" value="Cadastrar" />
+    </form>
+    <button class="back-btn" onclick="goHome()">Voltar</button>
+  </section>
+
+  <script>
+  let isMuted = false;
+
+  function playAudio(target) {
     const bgAudio = document.getElementById("bgAudio");
     const clickSound = document.getElementById("clickSound");
+    const gif = document.getElementById("mainGif");
+    const container = document.getElementById("container");
 
-    // Toca o som do botão
+    const loginSection = document.getElementById("login");
+    const signupSection = document.getElementById("signup");
+    const transitionIn = document.getElementById("transition-in");
+
+    // Som do clique
     if (clickSound) {
       clickSound.currentTime = 0;
-      clickSound.play().catch(err => console.log("Erro ao tocar clique:", err));
+      clickSound.play();
     }
 
-    // Inicia música de fundo se ainda não estiver tocando
-    if (bgAudio && bgAudio.paused && !isMuted) {
-      bgAudio.volume = 1;
-      bgAudio.play().catch(err => console.log("Erro ao tocar música de fundo:", err));
-    }
+    // Esconde a tela inicial
+    gif.style.display = "none";
+    container.style.display = "none";
+    loginSection.classList.remove("active");
+    signupSection.classList.remove("active");
+
+    // Roda vídeo de entrada
+    transitionIn.style.display = "block";
+    transitionIn.currentTime = 0;
+    transitionIn.play();
+
+    transitionIn.onended = () => {
+      transitionIn.style.display = "none";
+      bgAudio.play();
+
+      if (target === "login") {
+        loginSection.classList.add("active");
+      } else {
+        signupSection.classList.add("active");
+      }
+    };
+  }
+
+  function goHome() {
+    const gif = document.getElementById("mainGif");
+    const container = document.getElementById("container");
+    const loginSection = document.getElementById("login");
+    const signupSection = document.getElementById("signup");
+    const transitionOut = document.getElementById("transition-out");
+
+    // Esconde telas de formulário
+    loginSection.classList.remove("active");
+    signupSection.classList.remove("active");
+
+    // Roda transição de saída
+    transitionOut.style.display = "block";
+    transitionOut.currentTime = 0;
+    transitionOut.play();
+
+    transitionOut.onended = () => {
+      transitionOut.style.display = "none";
+      gif.style.display = "block";
+      container.style.display = "flex";
+    };
   }
 
   function toggleMute() {
@@ -177,28 +329,20 @@
 
     isMuted = !isMuted;
     bgAudio.muted = isMuted;
-
-    // Atualiza o ícone
     muteBtn.textContent = isMuted ? "🔇" : "🔊";
   }
-    function positionButtonsInsideGif() {
-      const gif = document.getElementById("mainGif");
-      const container = document.getElementById("container");
 
-      if (!gif || !container) return;
+  function positionButtonsInsideGif() {
+    const gif = document.getElementById("mainGif");
+    const container = document.getElementById("container");
 
-      const rect = gif.getBoundingClientRect();
+    if (!gif || !container) return;
 
-      // Alinhar botões a ~70% da altura visível do GIF
-      const targetTop = rect.top + rect.height * 0.75;
+    const rect = gif.getBoundingClientRect();
+    const targetTop = rect.top + rect.height * 0.75;
+    container.style.top = `${targetTop}px`;
+  }
 
-      container.style.top = `${targetTop}px`;
-    }
-
-    window.addEventListener("load", positionButtonsInsideGif);
-    window.addEventListener("resize", positionButtonsInsideGif);
-  </script>
-
-</body>
-</html>
-
+  window.addEventListener("load", positionButtonsInsideGif);
+  window.addEventListener("resize", positionButtonsInsideGif);
+</script>
