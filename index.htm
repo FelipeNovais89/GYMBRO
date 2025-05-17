@@ -101,13 +101,18 @@
   border-radius: 8px;
 }
 .form-section {
-      display: none;
+  display: none;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: -1;
-    }
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
     .form-section.active {
       display: block;
     }
@@ -123,8 +128,6 @@
 
 form {
       background: rgba(0,0,0,0.7);
-  top: 50%;
-      left:50%;
       padding: 25px;
       border-radius: 10px;
       max-width: 300px;
