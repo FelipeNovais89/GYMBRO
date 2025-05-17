@@ -38,6 +38,21 @@
       max-height: 100%;
       object-fit: contain;
     }
+    .form-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding-top: 80px;
+  z-index: 0;
+
+  /* Imagem de fundo das telas de login/signup */
+  background: url('gym_background.png') center center / cover no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
     .button-image {
       width: 100px;
       margin: 10px;
@@ -182,13 +197,7 @@ form {
       #muteBtn {
         justify-content: top right
         }
-      .form-section {
-        display: none;
-      }
-      .form-section.active {
-        display: block;
-      }
-    }
+          }
   </style>
 </head>
 <body>
@@ -198,11 +207,24 @@ form {
     <img src="gym_bro_intro.gif" alt="Gym Bro Intro" class="background-gif" id="mainGif" />
      </div>
   
+  <!-- Botões com imagem e texto -->
+<div class="container" id="container">
+  <div style="position: relative; display: inline-block;" onclick="playAudio('login')">
+    <img src="Anilha Botão.png" class="button-image" />
+    <div class="button-label">Login</div>
+  </div>
+
+  <div style="position: relative; display: inline-block;" onclick="playAudio('signup')">
+    <img src="Anilha Botão.png" class="button-image" />
+    <div class="button-label">Signup</div>
+  </div>
+</div>
+
 <!-- Vídeo de transição de entrada -->
-<video id="transition-in" src="videos/GYMBRO - Video Transition 1.mp4" class="video-transition"></video>
+<video id="transition-in" src="GYMBRO - Video Transition 1.mp4" class="video-transition" playsinline></video>
 
 <!-- Vídeo de transição de saída -->
-<video id="transition-out" src="videos/GYMBRO - Video Transition 2.mp4" class="video-transition"></video>
+<video id="transition-out" src="GYMBRO - Video Transition 2.mp4" class="video-transition" playsinline></video>
   
   <!-- 🔇 Botão de som -->
 <div id="muteBtn" onclick="toggleMute()">🔊</div>
@@ -219,21 +241,8 @@ form {
     Seu navegador não suporta áudio.
   </audio>
 
-  <!-- Botões com imagem e texto -->
-<div class="container" id="container">
-  <div style="position: relative; display: inline-block;" onclick="playAudio('login')">
-    <img src="Anilha Botão.png" class="button-image" />
-    <div class="button-label">Login</div>
-  </div>
-
-  <div style="position: relative; display: inline-block;" onclick="playAudio('signup')">
-    <img src="Anilha Botão.png" class="button-image" />
-    <div class="button-label">Signup</div>
-  </div>
-</div>
-  
   <!-- Tela Login -->
-  <section id="login" class="container form-section">
+  <section id="login" class="form-screenn form-section">
     <div class="background-wrapper">
     <img src="gym_background.png" class="background-gif" />
   </div>
@@ -247,7 +256,7 @@ form {
   </section>
 
   <!-- Tela Signup -->
-  <section id="signup" class="container form-section">
+  <section id="signup" class="form-screenn form-section">
     <img src="gym_background.png" class="background-gif" />
   </div>
     <form id="signupForm">
@@ -260,39 +269,57 @@ form {
     <button class="back-btn" onclick="goHome()">Voltar</button>
   </section>
 
-  <script>
+<script>
   let isMuted = false;
 
+  // Utilitários DOM
+  const get = id => document.getElementById(id);
+
+  // Posiciona os botões com base no GIF
+  function positionButtonsInsideGif() {
+    const gif = get("mainGif");
+    const container = get("container");
+
+    if (!gif || !container) return;
+
+    const rect = gif.getBoundingClientRect();
+    const targetTop = rect.top + rect.height * 0.75;
+    container.style.top = `${targetTop}px`;
+  }
+
+  // Toca som de clique + transição para login/signup
   function playAudio(target) {
-    const bgAudio = document.getElementById("bgAudio");
-    const clickSound = document.getElementById("clickSound");
-    const gif = document.getElementById("mainGif");
-    const container = document.getElementById("container");
+    const gif = get("mainGif");
+    const container = get("container");
+    const transitionIn = get("transition-in");
+    const bgAudio = get("bgAudio");
+    const clickSound = get("clickSound");
 
-    const loginSection = document.getElementById("login");
-    const signupSection = document.getElementById("signup");
-    const transitionIn = document.getElementById("transition-in");
+    // Seções
+    const loginSection = get("login");
+    const signupSection = get("signup");
 
-    // Som do clique
+    // Toca som de clique
     if (clickSound) {
       clickSound.currentTime = 0;
       clickSound.play();
     }
 
-    // Esconde a tela inicial
+    // Esconde tela inicial
     gif.style.display = "none";
     container.style.display = "none";
     loginSection.classList.remove("active");
     signupSection.classList.remove("active");
 
-    // Roda vídeo de entrada
+    // Exibe vídeo de entrada
     transitionIn.style.display = "block";
     transitionIn.currentTime = 0;
     transitionIn.play();
 
+    // Ao terminar vídeo de entrada, mostra tela de login/signup
     transitionIn.onended = () => {
       transitionIn.style.display = "none";
-      bgAudio.play();
+      if (!isMuted) bgAudio.play();
 
       if (target === "login") {
         loginSection.classList.add("active");
@@ -302,18 +329,18 @@ form {
     };
   }
 
+  // Transição de volta à tela inicial
   function goHome() {
-    const gif = document.getElementById("mainGif");
-    const container = document.getElementById("container");
-    const loginSection = document.getElementById("login");
-    const signupSection = document.getElementById("signup");
-    const transitionOut = document.getElementById("transition-out");
+    const gif = get("mainGif");
+    const container = get("container");
+    const transitionOut = get("transition-out");
 
-    // Esconde telas de formulário
+    const loginSection = get("login");
+    const signupSection = get("signup");
+
     loginSection.classList.remove("active");
     signupSection.classList.remove("active");
 
-    // Roda transição de saída
     transitionOut.style.display = "block";
     transitionOut.currentTime = 0;
     transitionOut.play();
@@ -325,26 +352,17 @@ form {
     };
   }
 
+  // Alterna som ligado/desligado
   function toggleMute() {
-    const bgAudio = document.getElementById("bgAudio");
-    const muteBtn = document.getElementById("muteBtn");
+    const bgAudio = get("bgAudio");
+    const muteBtn = get("muteBtn");
 
     isMuted = !isMuted;
     bgAudio.muted = isMuted;
     muteBtn.textContent = isMuted ? "🔇" : "🔊";
   }
 
-  function positionButtonsInsideGif() {
-    const gif = document.getElementById("mainGif");
-    const container = document.getElementById("container");
-
-    if (!gif || !container) return;
-
-    const rect = gif.getBoundingClientRect();
-    const targetTop = rect.top + rect.height * 0.75;
-    container.style.top = `${targetTop}px`;
-  }
-
+  // Inicialização
   window.addEventListener("load", positionButtonsInsideGif);
   window.addEventListener("resize", positionButtonsInsideGif);
 </script>
