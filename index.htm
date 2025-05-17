@@ -260,8 +260,8 @@ form {
 <div id="muteBtn" onclick="toggleMute()">🔊</div>
 
   <!-- Áudio -->
-  <audio id="bgAudio" loop>
-    <source src="GYM BRO Intro.mp3" type="audio/mpeg">
+  <audio id="bgAudio" loop></audio>
+    
     Seu navegador não suporta áudio.
   </audio>
 
@@ -317,24 +317,54 @@ form {
     const targetTop = rect.top + rect.height * 0.75;
     container.style.top = `${targetTop}px`;
   }
-
+const playlist = [
+  "audio/GYM BRO Intro.mp3",
+  "audio/Fitness Pulse (1).mp3",
+  "audio/Fitness Boost.mp3",
+  "audio/Fitness Boost (1).mp3"
+];
   // Toca som de clique + transição para login/signup
-  function playAudio(target) {
-    const gif = get("mainGif");
-    const container = get("container");
-    const transitionIn = get("transition-in");
-    const bgAudio = get("bgAudio");
-    const clickSound = get("clickSound");
+function playAudio(target) {
+  const gif = get("mainGif");
+  const container = get("container");
+  const transitionIn = get("transition-in");
+  const bgAudio = get("bgAudio");
+  const clickSound = get("clickSound");
 
-    // Seções
-    const loginSection = get("login");
-    const signupSection = get("signup");
+  const loginSection = get("login");
+  const signupSection = get("signup");
 
-    // Toca som de clique
-    if (clickSound) {
-      clickSound.currentTime = 0;
-      clickSound.play();
+  if (clickSound) {
+    clickSound.currentTime = 0;
+    clickSound.play();
+  }
+
+  gif.style.display = "none";
+  container.style.display = "none";
+  loginSection.classList.remove("active");
+  signupSection.classList.remove("active");
+
+  transitionIn.style.display = "block";
+  transitionIn.currentTime = 0;
+  transitionIn.play();
+
+  transitionIn.onended = () => {
+    transitionIn.style.display = "none";
+
+    if (!isMuted) {
+      const track = getRandomTrack();
+      bgAudio.src = track;
+      bgAudio.load();
+      bgAudio.play();
     }
+
+    if (target === "login") {
+      loginSection.classList.add("active");
+    } else {
+      signupSection.classList.add("active");
+    }
+  };
+}
 
     // Esconde tela inicial
     gif.style.display = "none";
