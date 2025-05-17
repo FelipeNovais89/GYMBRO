@@ -262,12 +262,6 @@ form {
   <!-- Música de fundo -->
 <audio id="bgAudio" loop></audio>
 
-<!-- Som do clique -->
-<audio id="clickSound">
-  <source src="barra_caindo_impacto.mp3" type="audio/mpeg">
-  Seu navegador não suporta áudio.
-</audio>
-
   <!-- 💥 Efeito sonoro ao clicar -->
   <audio id="clickSound">
     <source src="barra_caindo_impacto.mp3" type="audio/mpeg">
@@ -360,22 +354,23 @@ form {
     transitionIn.currentTime = 0;
     transitionIn.play();
 
-    transitionIn.onended = () => {
-      transitionIn.style.display = "none";
+transitionIn.onended = () => {
+  transitionIn.style.display = "none";
 
-      if (!isMuted) {
-        const track = getRandomTrack();
-        bgAudio.src = track;
-        bgAudio.load();
-        bgAudio.play();
-      }
+  if (!isMuted) {
+    const track = getRandomTrack();
+    console.log("Tocando:", track); // LOG para depuração
+    bgAudio.src = track;
+    bgAudio.load();
+    bgAudio.play().catch(err => console.error("Erro ao tocar áudio:", err));
+  }
 
-      if (target === "login") {
-        loginSection.classList.add("active");
-      } else {
-        signupSection.classList.add("active");
-      }
-    };
+  if (target === "login") {
+    loginSection.classList.add("active");
+  } else {
+    signupSection.classList.add("active");
+  }
+};
   }
 
   // Ação ao clicar em "Voltar"
